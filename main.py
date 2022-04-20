@@ -26,7 +26,7 @@ def application(): # Create windows and text and button
     # Create button
     btn = QtWidgets.QPushButton(window)  # create button
     btn.move(70, 40)
-    btn.setText("Нажми меня")
+    btn.setText("10 минут")
     btn.setFixedWidth(200)
     btn.clicked.connect(add_label)  # объект.событие_объекта.метод(функция) Функцию не вызываем, только помещаем.
 
