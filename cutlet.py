@@ -12,6 +12,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
+    def __init__(self):
+        self.counter = 10.00  # Счетчик
+        self.timer_run = False
+        self.timer_on_of = False  # Есть ли данные в поле надписи
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(300, 318)
@@ -109,31 +114,35 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     #**********Добавляем функционал классу********#
-        self.timer_on_of = False  # Есть ли данные в поле надписи
-        self.counter = 10.00 # Счетчик
 
         self.click_button()  # При нажатии на кнопку
 
 
-    def click_button(self):  # Вызов функции при нажатии
+    def click_button(self):  # Слушаем нажатие на кнопки
         # self.btn_start.clicked.connect(lambda: self.write_number(self.btn_start.text()))  # При нажатии передать текст кнопки
-        self.btn_start.clicked.connect(lambda: self.write_push_button("start_ten_min"))
-        self.btn_plus.clicked.connect(lambda: self.write_push_button("plus_min"))
-        self.btn_minus.clicked.connect(lambda: self.write_push_button("minus_min"))
-        self.btn_plus_ten.clicked.connect(lambda: self.write_push_button("plus_ten_min"))
-        self.btn_minus_ten.clicked.connect(lambda: self.write_push_button("minus_ten_min"))
-        self.btn_stop.clicked.connect(lambda: self.write_push_button("stop"))
+        self.btn_start.clicked.connect(lambda: self.push_button("start_ten_min"))
+        self.btn_plus.clicked.connect(lambda: self.push_button("plus_min"))
+        self.btn_minus.clicked.connect(lambda: self.push_button("minus_min"))
+        self.btn_plus_ten.clicked.connect(lambda: self.push_button("plus_ten_min"))
+        self.btn_minus_ten.clicked.connect(lambda: self.push_button("minus_ten_min"))
+        self.btn_stop.clicked.connect(lambda: self.push_button("stop"))
 
-    def push_button(self):
-        # Если это первый  клик тогда вызвать default_push_button
-        #Иначе вызвать установку на уже работающий таймер
+    def push_button(self, txt_button):
+        print('push button')
+        print(self.timer_on_of)
+        if self.timer_on_of == False:  # При первом запуске
+            self.default_push_button(txt_button)
+            self.timer_on_of = True
+        else:
+            #self.edit_timer(txt_button)
+            print(' push button = else ')
+            if txt_button == "stop":
+                self.timer_on_of = False
+
 
     def default_push_button(self, push_button):
-        # print(self.timer_on_of)
-        # print(push_button)
-        #print(self.label_remind.text())
         if push_button == "start_ten_min" and self.label_remind.text() == "Remind me in:":
-            self.label_remind.setText(" 10 минут")  # Передать текст в главное окно
+            self.label_remind.setText(" 10 минут и старт")  # Передать текст в главное окно
         elif push_button == "plus_min" and self.label_remind.text() == "Remind me in:":
             self.label_remind.setText(" 11 минут")
         elif push_button == "minus_min" and self.label_remind.text() == "Remind me in:":
@@ -144,11 +153,13 @@ class Ui_MainWindow(object):
             self.label_remind.setText("Remind me in:")
         elif push_button == "stop":
             self.label_remind.setText("Remind me in:")
+            print('установить таймер на умолчание')
+            self.timer_on_of = False
+            print('def_push_button', self.timer_on_of)
         else:
             self.label_remind.setText("Ошибка: Функция не определена!")
 
-    # def write_number(self, number):  # Получить текст кнопки
-    #     self.label_remind.setText(self.label_remind.text() + number)  # Добавить в поле  записи текст нажатой кнопки.
+
     #*****************************************************#
 
     def retranslateUi(self, MainWindow):
